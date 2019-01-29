@@ -15,22 +15,23 @@ public class PlayerUnitSelectSystem : JobComponentSystem
     {
 
         public EntityCommandBuffer.Concurrent commandBuffer;
-        [ReadOnly] public ComponentDataFromEntity<Selected> Selected;
+        [ReadOnly] public ComponentDataFromEntity<PlayerUnitSelect> Selected;
 
-        public void Execute(Entity entity, int i, [ReadOnly] ref PlayerInput input, [ReadOnly] ref Position pos)
+        public void Execute
+            (Entity entity, int i, [ReadOnly] ref PlayerInput input, [ReadOnly] ref Position pos)
         {
             if (input.LeftClick)
             {
                 //If selected component exists on our unit, unselect before we recalc selected
                 if(Selected.Exists(entity))
                 {
-                    commandBuffer.RemoveComponent<Selected>(i, entity);
+                    commandBuffer.RemoveComponent<PlayerUnitSelect>(i, entity);
                 }
 
                 //Add select component to unit
                 if (math.distance(input.MousePosition, pos.Value) <= 5)
                 {
-                    commandBuffer.AddComponent(i, entity, new Selected());
+                    commandBuffer.AddComponent(i, entity, new PlayerUnitSelect());
                 }
             }
 
@@ -41,7 +42,7 @@ public class PlayerUnitSelectSystem : JobComponentSystem
     {
         var job = new PlayerUnitSelectJob {
              commandBuffer = barrier.CreateCommandBuffer().ToConcurrent(),
-             Selected = GetComponentDataFromEntity<Selected>(),
+             Selected = GetComponentDataFromEntity<PlayerUnitSelect>(),
         };
         return job.Schedule(this, inputDeps);
     }

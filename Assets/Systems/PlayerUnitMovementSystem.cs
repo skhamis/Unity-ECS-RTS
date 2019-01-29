@@ -1,24 +1,26 @@
-﻿
-using System.Drawing;
-using Unity.Burst;
-using Unity.Entities;
-using Unity.Jobs;
-using Unity.Mathematics;
-using Unity.Transforms;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using Unity.Entities;
+using Unity.Transforms;
+using Unity.Jobs;
+using System.ComponentModel;
 
 public class PlayerUnitMovementSystem : JobComponentSystem
 {
-    [BurstCompile]
-    struct PlayerUnitMovementJob : IJobProcessComponentData<PlayerInput, Position, Selected>
+
+    public struct PlayerUnitMovementJob : IJobProcessComponentData<PlayerInput, NavAgent, PlayerUnitSelect>
     {
+        public float dT;
 
-
-        public void Execute(ref PlayerInput input, ref Position pos, ref Selected selected)
+        public void Execute
+            (ref PlayerInput pInput, ref NavAgent navAgent, ref PlayerUnitSelect selected)
         {
-            if(input.RightClick)
+           if (pInput.RightClick)
             {
-                pos.Value = input.MousePosition;
+                navAgent.finalDestination = pInput.MousePosition;
+                navAgent.agentStatus = NavAgentStatus.Moving;
+
             }
         }
     }
