@@ -1,10 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Unity.Entities;
-using Unity.Transforms;
 using Unity.Jobs;
-using System.ComponentModel;
+using Unity.Mathematics;
 
 public class PlayerUnitMovementSystem : JobComponentSystem
 {
@@ -12,13 +9,14 @@ public class PlayerUnitMovementSystem : JobComponentSystem
     public struct PlayerUnitMovementJob : IJobProcessComponentData<PlayerInput, NavAgent, PlayerUnitSelect>
     {
         public float dT;
+        public float3 mousePos;
 
         public void Execute
             (ref PlayerInput pInput, ref NavAgent navAgent, ref PlayerUnitSelect selected)
         {
            if (pInput.RightClick)
             {
-                navAgent.finalDestination = pInput.MousePosition;
+                navAgent.finalDestination = mousePos;
                 navAgent.agentStatus = NavAgentStatus.Moving;
 
             }
@@ -27,7 +25,19 @@ public class PlayerUnitMovementSystem : JobComponentSystem
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
-        var job = new PlayerUnitMovementJob();
+        var mousePos = Input.mousePosition;
+        Ray ray = Camera.main.ScreenPointToRay(mousePos);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            if(hit.collider != null)
+            {
+                mousePos = new float3(hit.point.x, 0, hit.point.z);
+            }
+        }
+        var job = new PlayerUnitMovementJob
+        {
+            mousePos = mousePos
+        };
         return job.Schedule(this, inputDeps);
     }
 }

@@ -19,13 +19,27 @@ public class UnitSpawnerSystem : ComponentSystem
         {
             foreach (var spawner in spawners)
             {
-                // Create an entity from the prefab set on the spawner component.
-                var prefab = EntityManager.GetSharedComponentData<UnitSpawner>(spawner).prefab;
-                var entity = EntityManager.Instantiate(prefab);
+                for(int i = 0; i < 5; i++)
+                {
+                    // Create an entity from the prefab set on the spawner component.
+                    var prefab = EntityManager.GetSharedComponentData<UnitSpawner>(spawner).prefab;
+                    var entity = EntityManager.Instantiate(prefab);
 
-                // Copy the position of the spawner to the new entity.
-                var position = EntityManager.GetComponentData<Position>(spawner);
-                EntityManager.SetComponentData(entity, position);
+                    // Copy the position of the spawner to the new entity.
+                    var position = EntityManager.GetComponentData<Position>(spawner);
+                    position.Value.x = position.Value.x + 2*i;
+
+                    EntityManager.SetComponentData(entity, position);
+
+                    var aabb = new AABB
+                    {
+                        //0.5f will represent halfwidth for now
+                        max =  position.Value + 0.5f,
+                        min = position.Value - 0.5f,
+
+                    };
+                    EntityManager.SetComponentData(entity, aabb);
+                }
 
                 // Destroy the spawner so this system only runs once.
                 EntityManager.DestroyEntity(spawner);

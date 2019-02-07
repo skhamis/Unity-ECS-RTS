@@ -11,14 +11,15 @@ public class PlayerUnitSelectSystem : JobComponentSystem
     public class SelectBarrier : BarrierSystem { }
     [Inject] SelectBarrier barrier;
 
-    struct PlayerUnitSelectJob : IJobProcessComponentDataWithEntity<PlayerInput, Position>
+    struct PlayerUnitSelectJob : IJobProcessComponentDataWithEntity<PlayerInput, AABB>
     {
 
         public EntityCommandBuffer.Concurrent commandBuffer;
         [ReadOnly] public ComponentDataFromEntity<PlayerUnitSelect> Selected;
+        public Ray ray;
 
         public void Execute
-            (Entity entity, int i, [ReadOnly] ref PlayerInput input, [ReadOnly] ref Position pos)
+            (Entity entity, int i, [ReadOnly] ref PlayerInput input, [ReadOnly] ref AABB aabb)
         {
             if (input.LeftClick)
             {
@@ -29,9 +30,10 @@ public class PlayerUnitSelectSystem : JobComponentSystem
                 }
 
                 //Add select component to unit
-                if (math.distance(input.MousePosition, pos.Value) <= 5)
-                {
+                if(RTSPhysics.Intersect(aabb, ray)) {
+
                     commandBuffer.AddComponent(i, entity, new PlayerUnitSelect());
+                    commandBuffer.AddComponent(i, entity, new SelectingComponent());
                 }
             }
 
@@ -43,6 +45,7 @@ public class PlayerUnitSelectSystem : JobComponentSystem
         var job = new PlayerUnitSelectJob {
              commandBuffer = barrier.CreateCommandBuffer().ToConcurrent(),
              Selected = GetComponentDataFromEntity<PlayerUnitSelect>(),
+             ray = Camera.main.ScreenPointToRay(Input.mousePosition),
         };
         return job.Schedule(this, inputDeps);
     }
