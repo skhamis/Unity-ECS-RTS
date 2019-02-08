@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Entities;
 using UnityEngine;
 
-//Used purely for tagging
-public struct Selecting : IComponentData
+//For tagging purposes only, removes the highlight
+public struct Deselecting : IComponentData
 {
 }

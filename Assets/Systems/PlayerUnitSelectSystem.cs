@@ -27,13 +27,14 @@ public class PlayerUnitSelectSystem : JobComponentSystem
                 if(Selected.Exists(entity))
                 {
                     commandBuffer.RemoveComponent<PlayerUnitSelect>(i, entity);
+                    commandBuffer.AddComponent(i, entity, new Deselecting());
                 }
 
                 //Add select component to unit
-                if(RTSPhysics.Intersect(aabb, ray)) {
-
+                if(RTSPhysics.Intersect(aabb, ray))
+                {
                     commandBuffer.AddComponent(i, entity, new PlayerUnitSelect());
-                    commandBuffer.AddComponent(i, entity, new SelectingComponent());
+                    commandBuffer.AddComponent(i, entity, new Selecting());
                 }
             }
 

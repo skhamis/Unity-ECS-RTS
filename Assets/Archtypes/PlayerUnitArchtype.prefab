@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3877792317077194066}
   - component: {fileID: 5796275024610771466}
   - component: {fileID: 243129630530865673}
-  - component: {fileID: 373147129198052131}
+  - component: {fileID: 5357751341272670982}
   m_Layer: 0
   m_Name: PlayerUnitArchtype
   m_TagString: Untagged
@@ -109,11 +109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b5c535cf7fff9489c24d7eeef8df1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SerializedData:
-    MousePosition:
-      x: 0
-      y: 0
-      z: 0
 --- !u!114 &243129630530865673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -132,7 +127,7 @@ MonoBehaviour:
       y: 0
       z: 0
     agentStatus: 0
---- !u!114 &373147129198052131
+--- !u!114 &5357751341272670982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -144,3 +139,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b691dbc630611fb4ebdbfdff85d8ec65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SerializedData:
+    min:
+      x: 0
+      y: 0
+      z: 0
+    max:
+      x: 0
+      y: 0
+      z: 0

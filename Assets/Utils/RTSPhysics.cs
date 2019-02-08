@@ -19,6 +19,12 @@ public static class RTSPhysics
         tmin = math.max(tmin, math.min(ty1, ty2));
         tmax = math.min(tmax, math.max(ty1, ty2));
 
+        double tz1 = (box.min.z - ray.origin.z) * (1 / ray.direction.z);
+        double tz2 = (box.max.z - ray.origin.z) * (1 / ray.direction.z);
+
+        tmin = math.max(tmin, math.min(tz1, tz2));
+        tmax = math.min(tmax, math.max(tz1, tz2));
+
         return tmax >= tmin;
     }
 

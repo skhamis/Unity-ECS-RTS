@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Entities;
-using Unity.Mathematics;
+﻿using Unity.Entities;
 
+//For tagging purposes only, tags the highlight
 [System.Serializable]
-public struct Highlight : ISharedComponentData
+public struct Highlight : IComponentData
 {
-    public GameObject prefab;
 }
 
-public class HighlightComponent : SharedComponentDataWrapper<Highlight> { }
+public class HighlightComponent : ComponentDataWrapper<Highlight> { }
+

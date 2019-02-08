@@ -1,6 +1,7 @@
 ﻿using Unity.Collections;
 using Unity.Entities;
 using Unity.Transforms;
+using Unity.Mathematics;
 
 // ComponentSystems run on the main thread. Use these when you have to do work that cannot be called from a job.
 public class UnitSpawnerSystem : ComponentSystem
@@ -34,7 +35,7 @@ public class UnitSpawnerSystem : ComponentSystem
                     var aabb = new AABB
                     {
                         //0.5f will represent halfwidth for now
-                        max =  position.Value + 0.5f,
+                        max = position.Value + 0.5f,
                         min = position.Value - 0.5f,
 
                     };
