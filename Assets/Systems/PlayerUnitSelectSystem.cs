@@ -8,8 +8,10 @@ using Unity.Collections;
 
 public class PlayerUnitSelectSystem : JobComponentSystem
 {
+    [UpdateAfter(typeof(PlayerUnitSelectSystem))]
     public class SelectBarrier : BarrierSystem { }
-    [Inject] SelectBarrier barrier;
+
+    [Inject] private SelectBarrier barrier;
 
     struct PlayerUnitSelectJob : IJobProcessComponentDataWithEntity<PlayerInput, AABB>
     {

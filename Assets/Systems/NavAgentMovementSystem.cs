@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Transforms;
-using UnityEngine;
 using Unity.Mathematics;
+using Unity.Collections;
 
 public class NavAgentMovementSystem : JobComponentSystem
 {
@@ -12,12 +11,12 @@ public class NavAgentMovementSystem : JobComponentSystem
     {
         public float dT;
 
-        public void Execute(ref Position position, ref NavAgent agent)
+        public void Execute(ref Position position, [ReadOnly] ref NavAgent agent)
         {
             float distance = math.distance(agent.finalDestination, position.Value);
             float3 direction = math.normalize(agent.finalDestination - position.Value);
             float speed = 5;
-            if(!(distance < 1) && agent.agentStatus == NavAgentStatus.Moving)
+            if(!(distance < 0.5) && agent.agentStatus == NavAgentStatus.Moving)
             {
                 position.Value += direction * speed * dT;
             }

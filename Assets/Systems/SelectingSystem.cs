@@ -33,8 +33,8 @@ public class SelectingSystem : ComponentSystem
 
                 //Trying out the Attach component with the TransformSystem
                 var attach = EntityManager.CreateEntity(typeof(Attach));
-                
-                EntityManager.SetComponentData(entity, new Position { Value = new float3(0,-0.5f,0) });
+
+                EntityManager.SetComponentData(entity, new Position { Value = new float3(0, -0.5f, 0) });
                 EntityManager.SetComponentData(entity, new Scale { Value = new float3(2, 0.1f, 2) });
                 EntityManager.SetComponentData(attach, new Attach { Parent = selectedUnit, Child = entity });
 

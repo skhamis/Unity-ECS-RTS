@@ -28,7 +28,7 @@ public static class RTSPhysics
         return tmax >= tmin;
     }
 
-    public static bool Intersect(AABB box1, AABB box2)
+    public static BlittableBool Intersect(AABB box1, AABB box2)
     {
         return (box1.min.x <= box2.max.x && box1.max.x >= box2.min.x) &&
                (box1.min.y <= box2.max.y && box1.max.y >= box2.min.y) &&

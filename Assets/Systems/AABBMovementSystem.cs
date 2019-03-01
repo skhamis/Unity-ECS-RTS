@@ -11,7 +11,7 @@ public class AABBMovementSystem : JobComponentSystem
     public struct AABBMovmentJob : IJobProcessComponentData<AABB, Position>
     {
         //Keep our box collider in sync with the position of the player
-        public void Execute(ref AABB aabb, ref Position pos)
+        public void Execute(ref AABB aabb, [ChangedFilter] ref Position pos)
         {
             aabb.max = pos.Value + 0.5f;
             aabb.min = pos.Value - 0.5f;

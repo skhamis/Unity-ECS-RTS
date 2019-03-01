@@ -2,6 +2,7 @@
 using Unity.Entities;
 using Unity.Jobs;
 using Unity.Mathematics;
+using Unity.Collections;
 
 public class PlayerUnitMovementSystem : JobComponentSystem
 {
@@ -12,7 +13,7 @@ public class PlayerUnitMovementSystem : JobComponentSystem
         public float3 mousePos;
 
         public void Execute
-            (ref PlayerInput pInput, ref NavAgent navAgent, ref PlayerUnitSelect selected)
+            ([ReadOnly] ref PlayerInput pInput, ref NavAgent navAgent, [ReadOnly] ref PlayerUnitSelect selected)
         {
            if (pInput.RightClick)
             {
