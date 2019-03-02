@@ -1,9 +1,11 @@
 # Pure ECS RTS with Unity3D 
 Trying to create a simple RTS game using Unity and pure ECS
 
-<b>Contributions welcome!</b>
+<b><u>Contributions welcome!</u></b>
+---
 
-Link to the tutorial series: 
+## Link to the tutorial series:
+
 [![playlist image](https://img.youtube.com/vi/36Q6HO19O6U/0.jpg)](https://www.youtube.com/watch?v=36Q6HO19O6U&list=PL13LVknaRwqyN4vKyeZwjcVlkjuvYgYwq)
 
 # Core APIs used:
