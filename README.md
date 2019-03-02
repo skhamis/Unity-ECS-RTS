@@ -2,7 +2,6 @@
 Trying to create a simple RTS game using Unity and pure ECS
 
 <b><u>Contributions welcome!</u></b>
----
 
 ## Link to the tutorial series:
 
