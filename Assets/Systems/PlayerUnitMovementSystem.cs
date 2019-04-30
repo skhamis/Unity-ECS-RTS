@@ -7,7 +7,7 @@ using Unity.Collections;
 public class PlayerUnitMovementSystem : JobComponentSystem
 {
 
-    public struct PlayerUnitMovementJob : IJobProcessComponentData<PlayerInput, NavAgent, PlayerUnitSelect>
+    public struct PlayerUnitMovementJob : IJobForEach<PlayerInput, NavAgent, PlayerUnitSelect>
     {
         public float dT;
         public float3 mousePos;

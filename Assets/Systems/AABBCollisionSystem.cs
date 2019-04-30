@@ -23,15 +23,15 @@ public class AABBCollisionSystem : JobComponentSystem
         }
     }
 
-    ComponentGroup m_AABBGroup;
+    EntityQuery m_AABBGroup;
 
     protected override void OnCreateManager()
     {
-        var query = new EntityArchetypeQuery
+        var query = new EntityQueryDesc
         {
             All = new ComponentType[] { typeof(AABB) }
         };
-        m_AABBGroup = GetComponentGroup(query);
+        m_AABBGroup = GetEntityQuery(query);
     }
 
     protected override JobHandle OnUpdate(JobHandle inputDeps)

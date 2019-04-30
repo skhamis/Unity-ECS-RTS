@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Unity.Entities;
+﻿using Unity.Entities;
 using Unity.Mathematics;
 
 
@@ -20,4 +17,4 @@ public struct NavAgent : IComponentData
     public NavAgentStatus agentStatus;
 }
 
-public class NavAgentComponent : ComponentDataWrapper<NavAgent> { }
+public class NavAgentComponent : ComponentDataProxy<NavAgent> { }

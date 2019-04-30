@@ -8,35 +8,45 @@ using Unity.Collections;
 
 public class PlayerUnitSelectSystem : JobComponentSystem
 {
-    [UpdateAfter(typeof(PlayerUnitSelectSystem))]
-    public class SelectBarrier : BarrierSystem { }
+    // EndSimulationBarrier is used to create a command buffer 
+    // which will then be played back when that barrier system executes.
+    EntityCommandBufferSystem m_EntityCommandBufferSystem;
 
-    [Inject] private SelectBarrier barrier;
+    protected override void OnCreate()
+    {
+        // Cache the EndSimulationBarrier in a field, so we don't have to create it every frame
+        m_EntityCommandBufferSystem = World.GetOrCreateSystem<EntityCommandBufferSystem>();
+    }
 
-    struct PlayerUnitSelectJob : IJobProcessComponentDataWithEntity<PlayerInput, AABB>
+    struct PlayerUnitSelectJob : IJobForEachWithEntity<PlayerInput, AABB>
     {
 
-        public EntityCommandBuffer.Concurrent commandBuffer;
+        [ReadOnly] public EntityCommandBuffer CommandBuffer;
+
         [ReadOnly] public ComponentDataFromEntity<PlayerUnitSelect> Selected;
         public Ray ray;
 
         public void Execute
-            (Entity entity, int i, [ReadOnly] ref PlayerInput input, [ReadOnly] ref AABB aabb)
+            (Entity entity, int index, [ReadOnly] ref PlayerInput input, [ReadOnly] ref AABB aabb)
         {
             if (input.LeftClick)
             {
                 //If selected component exists on our unit, unselect before we recalc selected
                 if(Selected.Exists(entity))
                 {
-                    commandBuffer.RemoveComponent<PlayerUnitSelect>(i, entity);
-                    commandBuffer.AddComponent(i, entity, new Deselecting());
+                    //CommandBuffer.RemoveComponent<PlayerUnitSelect>(i, entity);
+                    CommandBuffer.RemoveComponent<PlayerUnitSelect>(entity);
+                    //CommandBuffer.AddComponent(i, entity, new Deselecting());
+                    CommandBuffer.AddComponent(entity, new Deselecting());
                 }
 
                 //Add select component to unit
                 if(RTSPhysics.Intersect(aabb, ray))
                 {
-                    commandBuffer.AddComponent(i, entity, new PlayerUnitSelect());
-                    commandBuffer.AddComponent(i, entity, new Selecting());
+                    //CommandBuffer.AddComponent(i, entity, new PlayerUnitSelect());
+                    //CommandBuffer.AddComponent(i, entity, new Selecting());
+                    CommandBuffer.AddComponent(entity, new PlayerUnitSelect());
+                    CommandBuffer.AddComponent(entity, new Selecting());
                 }
             }
 
@@ -46,10 +56,16 @@ public class PlayerUnitSelectSystem : JobComponentSystem
     protected override JobHandle OnUpdate(JobHandle inputDeps)
     {
         var job = new PlayerUnitSelectJob {
-             commandBuffer = barrier.CreateCommandBuffer().ToConcurrent(),
+             CommandBuffer = m_EntityCommandBufferSystem.CreateCommandBuffer(),
              Selected = GetComponentDataFromEntity<PlayerUnitSelect>(),
              ray = Camera.main.ScreenPointToRay(Input.mousePosition),
-        };
-        return job.Schedule(this, inputDeps);
+        }.Schedule(this, inputDeps);
+
+        // SpawnJob runs in parallel with no sync point until the barrier system executes.
+        // When the barrier system executes we want to complete the SpawnJob and then play back the commands (Creating the entities and placing them).
+        // We need to tell the barrier system which job it needs to complete before it can play back the commands.
+        m_EntityCommandBufferSystem.AddJobHandleForProducer(job);
+
+        return job;
     }
 }

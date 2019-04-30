@@ -7,15 +7,14 @@ using Unity.Mathematics;
 // ComponentSystems run on the main thread. Use these when you have to do work that cannot be called from a job.
 public class SelectingSystem : ComponentSystem
 {
-    ComponentGroup m_highlights;
-    ComponentGroup m_selectedUnits;
+    EntityQuery m_highlights;
+    EntityQuery m_selectedUnits;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        m_highlights = GetComponentGroup(typeof(HighlightSpawner));
-        m_selectedUnits = GetComponentGroup(
-            typeof(PlayerUnitSelect),
-            typeof(Selecting));
+        //TODO FIX
+        m_highlights = GetEntityQuery(typeof(HighlightSpawner));
+        m_selectedUnits = GetEntityQuery(typeof(Selecting));
     }
 
     protected override void OnUpdate()
@@ -24,23 +23,27 @@ public class SelectingSystem : ComponentSystem
         using (var selectedUnits = m_selectedUnits.ToEntityArray(Allocator.TempJob))
         using (var highlights = m_highlights.ToEntityArray(Allocator.TempJob))
         {
+            //TODO Find a better way to spawn highlight prefabs 
+            // Works right now since we know there will be at least one HighlightSpawner
+            var highlight = highlights[0];
+            var prefab = EntityManager.GetComponentData<HighlightSpawner>(highlight).Prefab;
+
             foreach (var selectedUnit in selectedUnits)
             {
-                //Bit of a hack, but we know there is only one highlight spawner
-                var highlight = highlights[0];
-                var prefab = EntityManager.GetSharedComponentData<HighlightSpawner>(highlight).prefab;
+                //Remove the component from the unit so this system doesn't continually run
+                EntityManager.RemoveComponent<Selecting>(selectedUnit);
+
+                //Get our prefab from our spawner and set Translation (to produce a LocalToWorld)
                 var entity = EntityManager.Instantiate(prefab);
 
-                //Trying out the Attach component with the TransformSystem
-                var attach = EntityManager.CreateEntity(typeof(Attach));
-
-                EntityManager.SetComponentData(entity, new Position { Value = new float3(0, -0.5f, 0) });
-                EntityManager.SetComponentData(entity, new Scale { Value = new float3(2, 0.1f, 2) });
-                EntityManager.SetComponentData(attach, new Attach { Parent = selectedUnit, Child = entity });
-
-                // Remove the "tagging" component so we only create & attach
-                // the highlight once
-                EntityManager.RemoveComponent(selectedUnit, typeof(Selecting));
+                //For a child to sucessfully have a parent it needs:
+                // 1. LocalToWorld (either a translation or rotation)
+                // 2. LocalToParent
+                // 3. Parent
+                EntityManager.SetComponentData(entity, new Translation { Value = new float3(0, -0.5f, 0) });
+                var localParent = EntityManager.GetComponentData<LocalToWorld>(selectedUnit).Value;
+                EntityManager.AddComponentData(entity, new LocalToParent { Value = localParent });
+                EntityManager.AddComponentData(entity, new Parent { Value = selectedUnit });
             }
         }
     }

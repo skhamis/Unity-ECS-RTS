@@ -5,20 +5,21 @@ using Unity.Transforms;
 // ComponentSystems run on the main thread. Use these when you have to do work that cannot be called from a job.
 public class DeselectSystem : ComponentSystem
 {
-    ComponentGroup m_highlights;
+    EntityQuery m_highlights;
 
-    protected override void OnCreateManager()
+    protected override void OnCreate()
     {
-        m_highlights = GetComponentGroup(typeof(Attached), typeof(Highlight));
+        m_highlights = GetEntityQuery(typeof(Highlight));
     }
 
     protected override void OnUpdate()
     {
-        using (var attachedHighlights = m_highlights.ToEntityArray(Allocator.TempJob))
+        using (var highlights = m_highlights.ToEntityArray(Allocator.TempJob))
         {
-            foreach (var highlight in attachedHighlights)
+            foreach (var highlight in highlights)
             {
                 var parent = EntityManager.GetComponentData<Parent>(highlight).Value;
+
                 if (EntityManager.HasComponent<Deselecting>(parent))
                 {
                     EntityManager.RemoveComponent<Deselecting>(parent);

@@ -9,10 +9,10 @@ using UnityEngine;
 public class PlayerInputSystem : JobComponentSystem
 {
     [BurstCompile]
-    struct PlayerInputJob : IJobProcessComponentData<PlayerInput>
+    struct PlayerInputJob : IJobForEach<PlayerInput>
     {
-        public BlittableBool leftClick;
-        public BlittableBool rightClick;
+        public bool leftClick;
+        public bool rightClick;
         
         public void Execute(ref PlayerInput input)
         {

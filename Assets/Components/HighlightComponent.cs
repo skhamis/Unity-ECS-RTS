@@ -6,5 +6,4 @@ public struct Highlight : IComponentData
 {
 }
 
-public class HighlightComponent : ComponentDataWrapper<Highlight> { }
-
+public class HighlightComponent : ComponentDataProxy<Highlight> { }
