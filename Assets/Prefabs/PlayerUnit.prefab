@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3671327510630132365}
   - component: {fileID: 7078495259819259555}
   - component: {fileID: 2141203194423375982}
-  - component: {fileID: 4325214582011619625}
+  - component: {fileID: 8332733213320625513}
   m_Layer: 0
   m_Name: PlayerUnit
   m_TagString: Untagged
@@ -127,7 +127,7 @@ MonoBehaviour:
       y: 0
       z: 0
     agentStatus: 0
---- !u!114 &4325214582011619625
+--- !u!114 &8332733213320625513
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

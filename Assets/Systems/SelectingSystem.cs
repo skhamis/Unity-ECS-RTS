@@ -12,7 +12,6 @@ public class SelectingSystem : ComponentSystem
 
     protected override void OnCreate()
     {
-        //TODO FIX
         m_highlights = GetEntityQuery(typeof(HighlightSpawner));
         m_selectedUnits = GetEntityQuery(typeof(Selecting));
     }
@@ -35,6 +34,7 @@ public class SelectingSystem : ComponentSystem
 
                 //Get our prefab from our spawner and set Translation (to produce a LocalToWorld)
                 var entity = EntityManager.Instantiate(prefab);
+                EntityManager.AddComponent(entity, typeof(Highlight));
 
                 //For a child to sucessfully have a parent it needs:
                 // 1. LocalToWorld (either a translation or rotation)

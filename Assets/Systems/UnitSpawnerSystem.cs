@@ -96,7 +96,27 @@ public class UnitSpawnerSystem : JobComponentSystem
 
                      var position = math.transform(location.Value,
                          new float3(x * 2, 0, y * 2));
+
+                    //TODO: Eventually switch to the new Unity.Physics AABB 
+                    var aabb = new AABB
+                    {
+                        //0.5f will represent halfwidth for now
+                        max = position + 0.5f,
+                        min = position - 0.5f,
+
+                    };
+
+                    
+
+
                     CommandBuffer.SetComponent(instance, new Translation { Value = position });
+
+                    //Weirdly have to do it in code now
+                    CommandBuffer.AddComponent(instance, aabb);
+                    CommandBuffer.AddComponent(instance, new PlayerInput());
+                    CommandBuffer.AddComponent(instance, new NavAgent());
+
+
                 }
             }
 
