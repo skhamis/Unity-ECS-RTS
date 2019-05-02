@@ -1,9 +1,6 @@
 ﻿using Unity.Entities;
 
-//For tagging purposes only, tags the highlight
-[System.Serializable]
+//For tagging purposes only, allows us to find the highlight prefab
 public struct Highlight : IComponentData
 {
 }
-
-public class HighlightComponent : ComponentDataProxy<Highlight> { }

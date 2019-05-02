@@ -9,12 +9,8 @@ public enum NavAgentStatus
 }
 
 
-
-[System.Serializable]
-public struct NavAgent : IComponentData
+public struct UnitNavAgent : IComponentData
 {
     public float3 finalDestination;
     public NavAgentStatus agentStatus;
 }
-
-public class NavAgentComponent : ComponentDataProxy<NavAgent> { }

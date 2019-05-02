@@ -114,7 +114,7 @@ public class UnitSpawnerSystem : JobComponentSystem
                     //Weirdly have to do it in code now
                     CommandBuffer.AddComponent(instance, aabb);
                     CommandBuffer.AddComponent(instance, new PlayerInput());
-                    CommandBuffer.AddComponent(instance, new NavAgent());
+                    CommandBuffer.AddComponent(instance, new UnitNavAgent());
 
 
                 }

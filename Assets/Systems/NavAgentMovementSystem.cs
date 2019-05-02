@@ -7,11 +7,11 @@ using Unity.Collections;
 
 public class NavAgentMovementSystem : JobComponentSystem
 {
-    public struct NavAgentMovementJob : IJobForEach<Translation, NavAgent>
+    public struct NavAgentMovementJob : IJobForEach<Translation, UnitNavAgent>
     {
         public float dT;
 
-        public void Execute(ref Translation position, [ReadOnly] ref NavAgent agent)
+        public void Execute(ref Translation position, [ReadOnly] ref UnitNavAgent agent)
         {
             float distance = math.distance(agent.finalDestination, position.Value);
             float3 direction = math.normalize(agent.finalDestination - position.Value);

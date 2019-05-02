@@ -7,13 +7,13 @@ using Unity.Collections;
 public class PlayerUnitMovementSystem : JobComponentSystem
 {
 
-    public struct PlayerUnitMovementJob : IJobForEach<PlayerInput, NavAgent, PlayerUnitSelect>
+    public struct PlayerUnitMovementJob : IJobForEach<PlayerInput, UnitNavAgent, PlayerUnitSelect>
     {
         public float dT;
         public float3 mousePos;
 
         public void Execute
-            ([ReadOnly] ref PlayerInput pInput, ref NavAgent navAgent, [ReadOnly] ref PlayerUnitSelect selected)
+            ([ReadOnly] ref PlayerInput pInput, ref UnitNavAgent navAgent, [ReadOnly] ref PlayerUnitSelect selected)
         {
            if (pInput.RightClick)
             {

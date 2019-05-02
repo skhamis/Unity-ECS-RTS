@@ -418,8 +418,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prefab: {fileID: 4014730341067900399, guid: c4d1d755b3fbdf146b1c05a521f87df0, type: 3}
-  CountX: 5
-  CountY: 5
+  CountX: 10
+  CountY: 10
 --- !u!114 &1539815006
 MonoBehaviour:
   m_ObjectHideFlags: 0
